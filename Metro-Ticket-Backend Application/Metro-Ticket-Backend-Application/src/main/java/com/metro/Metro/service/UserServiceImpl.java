@@ -2,6 +2,8 @@ package com.metro.Metro.service;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.metro.Metro.exception.UserException;
 import com.metro.Metro.model.User;
 import com.metro.Metro.payload.UserRequest;
 import com.metro.Metro.repository.UserRepo;
@@ -26,15 +28,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User updateUser(String email,User user) {
+	try{
 		User savedUser = userRepo.findByEmailId(email);
 		savedUser.setEmailId(user.getEmailId());
 		savedUser.setFirstName(user.getFirstName());
 		savedUser.setPassword(user.getPassword());
 		savedUser.setPhoneNo(user.getPhoneNo());
 		savedUser.setLastName(user.getLastName());
-		
+	
 		User updatedUser = userRepo.save(savedUser);
 		return updatedUser;
+	} catch(Exception e) {
+		e.printStackTrace();
+		throw new UserException("User cannot be updated now...");
+	}
 	}
 
 	@Override

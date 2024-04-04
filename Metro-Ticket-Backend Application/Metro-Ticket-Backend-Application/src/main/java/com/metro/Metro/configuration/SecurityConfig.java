@@ -16,7 +16,7 @@ import com.metro.Metro.Filter.JWTTokenGenerator;
 import com.metro.Metro.Filter.JwtTokenValidator;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
 	@Bean
@@ -32,14 +32,15 @@ public class SecurityConfig {
              authorizeRequests
                  .requestMatchers(HttpMethod.POST, "/api/user/register_user").permitAll()
                  .requestMatchers(HttpMethod.POST, "/api/user/register_admin").permitAll()
+                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                  .anyRequest().authenticated()
                  
          )
 				  .addFilterAfter(new JWTTokenGenerator(), BasicAuthenticationFilter.class)
 				  .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class);
-         System.out.println("before setting the session policy");
+         
 		 http.sessionManagement((session)-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		 System.out.println("After setting the session policy");
+		
 		http.httpBasic(withDefaults());
 		return http.build(); 
 		
